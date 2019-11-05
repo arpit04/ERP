@@ -3,7 +3,6 @@ from flask import Flask, render_template, request, redirect, make_response,jsoni
 import datetime
 import requests
 import os
-# import jwt
 from werkzeug.utils import secure_filename
 import random
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -26,11 +25,7 @@ app.config['JWT_TOKEN_LOCATION']= 'cookies'
 @app.route("/",methods=["GET", "POST"])
 def login():
     if request.method == "POST":
-        # req = request.values
-        # uname = req["username"]
-        # passw = req["password"]
         uname = request.form["uname"]
-        # session['username'] = request.form["uname"]
         passw = request.form["passw"]
         users = user.query.filter_by(username=uname).all()
         for us in users:
@@ -39,24 +34,13 @@ def login():
             return jsonify({"message":"user not found"})
         if check_password_hash(us.password,passw): 
             jwt = create_access_token(identity=us.username)
-            
-            # headers = {'headers':jwt}
             resp = redirect(url_for('protected'))
-            # requests.post('http://127.0.0.1:5000')
-            set_access_cookies(resp, jwt)   #access cookie and verify jwt token
+            set_access_cookies(resp, jwt) 
             return resp
         return render_template("public/login.html")
     return render_template("public/login.html")
-# @app.route('/re')
-# def re():
-#     username = "admin"
-#     email = "admin@mail.com"
-#     password = generate_password_hash("abcde",method='sha256')
-#     result = user(username=username,email=email,password=password)
-#     db.session.add(result)
-#     db.session.commit()
-#     return "success"
 @app.route('/register', methods=['GET', 'POST'])
+@jwt_required
 def register():
     rows = company.query.order_by(company.company_name)
     form = RegistrationForm(request.form)
@@ -69,6 +53,7 @@ def register():
     return render_template('public/companies.html',rows=rows, form=form)
 
 @app.route("/fin", methods=['GET', 'POST'])
+@jwt_required
 def fin():
     row = finance.query.filter_by(company_name=session['Company'])
     cname = session['Company']
@@ -81,6 +66,7 @@ def fin():
     return render_template('public/welcome.html', row=row, form=form)
 
 @app.route('/finyear', methods=['GET','POST'])
+@jwt_required
 def finyear():
     if request.method == 'POST':
         # flash('message for welcome company page')
@@ -89,6 +75,7 @@ def finyear():
     return render_template('public/welcome.html', row=row)
 
 @app.route('/task', methods=['GET','POST'])
+@jwt_required
 def task():
     if request.method == 'POST':
         session['year'] = request.form["finyear"]
@@ -96,6 +83,7 @@ def task():
     return render_template('public/dashboard.html')
 
 @app.route('/Item', methods=['GET','POST'])
+@jwt_required
 def Item():
     form = ItemForm(request.form)
     # flash('message for item master')
@@ -107,6 +95,7 @@ def Item():
     return render_template('public/Item-Master.html', form=form)
 
 @app.route('/Tax', methods=['GET','POST'])
+@jwt_required
 def Tax():
     form = TaxForm(request.form)
     if request.method == 'POST' and form.validate():
@@ -117,6 +106,7 @@ def Tax():
     return render_template('public/Tax-Master.html', form=form)
 
 @app.route('/Party', methods=['GET','POST'])
+@jwt_required
 def Party():
     form = PartyForm(request.form)
     print()
@@ -129,6 +119,7 @@ def Party():
     return render_template('public/Party-Master.html', form=form)
 
 @app.route('/logout')
+@jwt_required
 def logout():
     session.pop('username', None)
     flash('you are logged out')
