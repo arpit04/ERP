@@ -1,0 +1,28 @@
+{% extends "public/templates/layout.html" %}
+{% block body %}
+<body>
+<div class="topnav">
+  <a class="active" href="register">{{session['Company']}} ( {{session['year']}} )</a>
+  <a href="{{ url_for('Item') }}">Item Master</a>
+  <a href="{{ url_for('Tax') }}">Tax Master</a>
+  <a href="{{ url_for('Party') }}">Party Master</a>
+</div>
+<h2 align="center">Tax Master</h2>
+<div class="container" style="padding-top:1%; padding-left:25.5%;">
+    <div style="display:inline-block; box-shadow: 10px 10px 10px 10px rgba(0, 0, 0, 0.2); padding:2% 10% 2% 10%">
+        <form method="POST" name="tax">
+        <dl>
+        {{ form.csrf_token }}
+        <input type="text" name="CGST" placeholder="Enter CGST" class="form-control" /><br>
+        <input type="text" name="SGST" placeholder="Enter SGST" class="form-control"/><br>
+        <input type="text" name="IGST" placeholder="Enter IGST" class="form-control" /><br>
+        <input type="text" name="CESS" placeholder="Enter CESS" class="form-control"/><br>
+        <input type="text" name="group_name" placeholder="Enter Group Name" class="form-control"/><br>
+          <div style="text-align:right">
+            <input type="submit" value="Save" class="btn btn-primary">
+          </div>
+        </form>
+    </div><br>
+</div>
+</body>
+{% endblock %}

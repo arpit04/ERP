@@ -1,0 +1,46 @@
+{% extends "public/templates/layout.html" %}
+{% block body %}
+<body>
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{message}}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+<h2 align="center">Company</h2>
+<div class="container" style="padding-top:1%; padding-left:25%;">
+<form action = "{{ url_for('finyear') }}" method="POST">
+    <div>
+        <div style="display:inline-block; box-shadow: 10px 10px 10px 10px rgba(0.2, 0.2, 0.2, 0.2); border-radius:5px; padding:4% 10% 2% 10%">
+            <select name="companies" size="6">
+            {% for row in rows %}
+            <option>{{row["company_name"]}}</option>
+            {% endfor %}
+            </select><br><br>
+            <input type=submit value=Continue class="btn btn-success">
+        </div>
+    </div><br>
+</form>
+        <div style="display:inline-block; box-shadow: 10px 10px 10px 10px rgba(0.2, 0.2, 0.2, 0.2); border-radius:5px; padding:2% 10% 2% 10%">
+            <h3>Add New</h3>
+            <form method=post>
+            <dl>
+                {{ form.csrf_token }}
+                {{ form.company_name(placeholder='Enter company name', class="form-control") }}</dl>
+                <dl>{{ form.address(placeholder='Enter company address', class="form-control") }}</dl>
+                <dl>{{ form.GST_number(placeholder='Enter GST number', class="form-control") }}</dl>
+                <dl>{{ form.company_email(placeholder='Enter email', class="form-control") }}</dl>
+                <dl>{{ form.contact(placeholder='Enter contact number', class="form-control") }}</dl>
+              <p><input type=submit value=Register class="btn btn-primary">
+            </form>
+        </div>
+</div>
+</body>
+{% endblock %}

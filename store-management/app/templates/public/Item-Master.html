@@ -1,0 +1,39 @@
+{% extends "public/templates/layout.html" %}
+{% block body %}
+<body>
+<div class="topnav">
+  <a class="active" href="register">{{session['Company']}} ( {{session['year']}} )</a>
+  <a href="{{ url_for('Item') }}">Item Master</a>
+  <a href="{{ url_for('Tax') }}">Tax Master</a>
+  <a href="{{ url_for('Party') }}">Party Master</a>
+</div>
+{% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{message}}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
+        {% endif %}
+{% endwith %}
+<h2 align="center">Item Master</h2>
+<div class="container" style="padding-top:1%; padding-left:18.5%;">
+    <div style="display:inline-block; box-shadow: 10px 10px 10px 10px rgba(0, 0, 0, 0.2); padding:2% 10% 2% 10%">
+        <form method="POST" name="item">
+          {{ form.csrf_token }}
+          <input type="text" name="item_cat" placeholder="Enter Item Category" class="form-control" /><br>
+          <input type="number" name="ITSN_code" placeholder="Enter ITSN Code" class="form-control"/><br>
+          <input type="text" name="remark" placeholder="Enter Remark" class="form-control" /><br>
+          <input type="text" name="tax_type" placeholder="Enter Tax Type" class="form-control"/><br>
+          <textarea rows="5" cols="50" name="disc" placeholder="Enter Discrption" class="form-control"></textarea><br>
+            <div style="text-align:end; margin-top:5%">
+              <input type="submit" value="Save" class="btn btn-primary">
+            </div>
+        </form>
+    </div><br>
+</div>
+</body>
+{% endblock %}

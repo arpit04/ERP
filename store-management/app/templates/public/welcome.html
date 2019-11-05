@@ -1,0 +1,42 @@
+{% extends "public/templates/layout.html" %}
+{% block body %}
+<body>
+{% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{message}}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
+        {% endif %}
+{% endwith %}
+    <h2 align="center">Welcome {{session['Company']}}</h2>
+    <div class="container" style="padding-top:1%; padding-left:25%;">
+        <form action = "{{ url_for('task')}}" method="POST">
+            <div style="display:inline-block; box-shadow: 10px 10px 10px 10px rgba(0, 0, 0, 0.2); border-radius:5px; padding:4% 10% 2% 10%">
+                <select name="finyear" size="6">
+                {% for rows in row %}
+                <option>{{rows["finance_year"]}}</option>
+                {% endfor %}
+                </select>
+                <input type=submit value=Continue class="btn btn-success">
+            </div><br><br>
+        </form>
+        <div style="display:inline-block; box-shadow: 10px 10px 10px 10px rgba(0, 0, 0, 0.2); border-radius:5px; padding:2% 10% 2% 10%">
+        <h3>Add Finance Details</h3>
+        <form method=post name="finance">
+                <dl>
+                    {{ form.csrf_token }}
+                    {{ form.company_name( placeholder='Enter company name', class="form-control") }}</dl>
+                    <dl>{{ form.start_date(placeholder='Start Date', class="form-control") }}</dl>
+                    <dl>{{ form.end_date(placeholder='End Date', class="form-control") }}</dl>
+                    <dl>{{ form.finance_year(placeholder='Finance Year', class="form-control") }}</dl>
+                <input type="submit" value="Save" class="btn btn-primary">
+            </form>
+        </div><br>
+    </div>
+</body>
+{% endblock %}

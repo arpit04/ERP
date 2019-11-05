@@ -1,0 +1,12 @@
+{% extends "public/templates/layout.html" %}
+{% block body %}
+<body>
+<div class="topnav">
+  <a class="active" href="register">{{session['Company']}} ( {{session['year']}} )</a>
+  <a href="{{ url_for('Item') }}">Item Master</a>
+  <a href="{{ url_for('Tax') }}">Tax Master</a>
+  <a href="{{ url_for('Party') }}">Party Master</a>
+</div>
+<h2 align="center"></h2>
+</body>
+{% endblock %}
